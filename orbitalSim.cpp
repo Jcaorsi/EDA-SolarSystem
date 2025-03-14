@@ -69,18 +69,22 @@ void configureAsteroid(OrbitalBody *body, float centerMass)
 OrbitalSim *constructOrbitalSim(float timeStep)
 {
     // Your code goes here...
-    OrbitalSim newSim;
-    newSim.timeStep = timeStep;            //CAREFUL
-    newSim.elapsedTime = 0;
-    newSim.numBodies = 9;
+
     /*Adds the Solar System to the array*/
+    OrbitalSim *newSim = new OrbitalSim;
+
+    newSim->timeStep = timeStep;            //CAREFUL
+    newSim->elapsedTime = 0;
+    newSim->numBodies = 9;
+
+
     for (int i = 0; i < 9; ++i)
     {
-        newSim.bodies[i] = { solarSystem[i].mass, solarSystem[i].radius, 
+        newSim->bodies[i] = { solarSystem[i].mass, solarSystem[i].radius, 
             solarSystem[i].color, solarSystem[i].position, solarSystem[i].velocity, 0 };
-    }
 
-    return &newSim; // This should return your orbital sim
+    }
+    return newSim; // This should return your orbital sim
 }
 
 /**

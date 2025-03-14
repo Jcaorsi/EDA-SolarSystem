@@ -96,14 +96,9 @@ void renderView(View *view, OrbitalSim *sim)
     BeginMode3D(view->camera);
 
     // Fill in your 3D drawing code here:
-    Vector3 v1 = { -4.0f, 0.0f, 2.0f };
-   // DrawCube(v1, 2.0f, 5.0f, 2.0f, RED);
-    for (int i = 0; i < 1; ++i)
+    for (int i = 0; i < sim->numBodies; ++i)                    //COMENTAR
     {
-        DrawSphere(v1, 1, WHITE);
-        DrawPoint3D(v1, YELLOW);
-        DrawSphere(Vector3Scale(sim->bodies[i].position, 1E-11), sim->bodies[i].radius * 0.005F * logf(sim->bodies[i].radius), sim->bodies[i].color);
-
+        DrawSphere(Vector3Scale(sim->bodies[i].position, 1E-11), 0.005F * logf(sim->bodies[i].radius), sim->bodies[i].color);
     }
     DrawGrid(10, 10.0f);
     EndMode3D();
