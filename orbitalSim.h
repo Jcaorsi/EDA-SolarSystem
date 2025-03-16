@@ -7,11 +7,12 @@
 
 #ifndef ORBITALSIM_H
 #define ORBITALSIM_H
+#define MAX_BODIES 100
 #include <raylib.h>
 /**
- * @brief Orbital body definition
+ * @brief Orbital body with its essential properties is defined
  */
-struct OrbitalBody
+struct OrbitalBody                          
 {
     // Fill in your code here...
     float mass;		  // [kg]
@@ -32,7 +33,7 @@ struct OrbitalSim
     float timeStep;
     float elapsedTime;
     unsigned int numBodies;
-    OrbitalBody bodies[50];     //Place a define so that the length of the array is well determined
+    OrbitalBody bodies[MAX_BODIES];    
 
 };
 

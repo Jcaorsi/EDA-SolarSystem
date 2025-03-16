@@ -16,6 +16,7 @@
 
 #define GRAVITATIONAL_CONSTANT 6.6743E-11F
 #define ASTEROIDS_MEAN_RADIUS 4E11F
+#define ASTEROIDS_BODYNUM 0
 
 /**
  * @brief Gets a uniform random value in a range
@@ -70,18 +71,26 @@ OrbitalSim *constructOrbitalSim(float timeStep)
 {
     // Your code goes here...
 
-    /*Adds the Solar System to the array*/
+    /*Adds the Solar System and Alpha Centaury System data to the array as well as the proper timestep, elapsedtime and number of bodies initial values */
     OrbitalSim *newSim = new OrbitalSim;
 
-    newSim->timeStep = timeStep;            //CAREFUL
+    newSim->timeStep = timeStep;            
     newSim->elapsedTime = 0;
-    newSim->numBodies = 9;
+    newSim->numBodies = SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM + ASTEROIDS_BODYNUM;
 
 
-    for (int i = 0; i < 9; ++i)
-    {
-        newSim->bodies[i] = { solarSystem[i].mass, solarSystem[i].radius, 
+    for (unsigned int i = 0; i < 9; ++i)                 // The first elements of the array will be the bodies of the Solar System and Alpha Centaury System.
+    {                                                               // After them, the asteroid's data will be stored, the "else" case.
+        if (i < newSim->numBodies)
+        {
+            newSim->bodies[i] = { solarSystem[i].mass, solarSystem[i].radius,
             solarSystem[i].color, solarSystem[i].position, solarSystem[i].velocity, 0 };
+        }
+        else
+        {
+
+        }
+
 
     }
     return newSim; // This should return your orbital sim
@@ -93,7 +102,7 @@ OrbitalSim *constructOrbitalSim(float timeStep)
 void destroyOrbitalSim(OrbitalSim *sim)
 {
     // Your code goes here...
-
+    delete sim;
 
 }
 
@@ -105,12 +114,33 @@ void destroyOrbitalSim(OrbitalSim *sim)
 void updateOrbitalSim(OrbitalSim *sim)
 {
     // Your code goes here...
-    for (int i = 0; i < 9; ++i)
+    /*Considering the reduced mass that asteroids have, we will focus solely on the calculation of gravitational force between every body,
+    except for the one between asteroids. By doing this, we will greatly reduce the computing power required for the movement in our simulation*/
+    Vector3 gravityForce;
+    float auxScalar;
+    Vector3 auxVector;
+
+    for (unsigned int i = 0; i < 12; ++i)
     {
-
-        sim->bodies[i].velocity = Vector3Add(sim->bodies[i].velocity, sim->bodies[i].aceleration);
-
+        sim->bodies[i].aceleration = { 0,0,0 };
     }
-
+    /*for (int i = 0; i < SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM - 2 + ASTEROIDS_BODYNUM; ++i)
+    {
+        for (int j = i + 1; j < SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM; j++)
+        {
+            auxVector = Vector3Subtract(sim->bodies[j].position, sim->bodies[i].position);
+            gravityForce = Vector3Normalize(auxVector);                                          // The gravitational force is calculated by steps.
+            auxScalar = Vector3Length(auxVector);
+            gravityForce = Vector3Scale( gravityForce, (float) -6.6743E-11 * sim->bodies[i].mass * sim->bodies[j].mass / (auxScalar * auxScalar));
+            
+            sim->bodies[i].aceleration += Vector3Scale(gravityForce, 1 / sim->bodies[i].mass);
+            sim->bodies[j].aceleration += Vector3Scale(gravityForce, 1 / sim->bodies[j].mass);
+        }
+        sim->bodies[i].velocity += Vector3Scale(sim->bodies[i].aceleration, sim->timeStep);
+    }*/
+    for (unsigned int i = 0; i < sim->numBodies; ++i)
+    {
+        sim->bodies[i].position += Vector3Scale(sim->bodies[i].velocity, sim->timeStep);
+    }
 
 }

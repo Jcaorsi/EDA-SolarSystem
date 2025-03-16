@@ -8,10 +8,6 @@
 #include "OrbitalSim.h"
 #include "View.h"
 
-
-#include <stdio.h>                  //borrar
-//#include "ephemerides.h"
-
 #define SECONDS_PER_DAY 86400
 
 int main()
@@ -24,13 +20,11 @@ int main()
     View *view = constructView(fps);
     while (isViewRendering(view))
     {
-        //updateOrbitalSim(sim);
-        Vector3 v1 = { 0,0,0 };
+        updateOrbitalSim(sim);
         renderView(view, sim);
     }
 
     destroyView(view);
     destroyOrbitalSim(sim);
-    delete sim;
     return 0;
 }
