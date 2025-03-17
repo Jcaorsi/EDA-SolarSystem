@@ -8,6 +8,7 @@
 #include <time.h>
 #include <math.h>
 #include "View.h"
+//#include "ephemerides.h"
 #include <raymath.h>
 
 #define WINDOW_WIDTH 1280
@@ -96,7 +97,8 @@ void renderView(View *view, OrbitalSim *sim)
     BeginMode3D(view->camera);
 
     // Fill in your 3D drawing code here:
-    for (int i = 0; i < 9; ++i)                    //COMENTAR
+    //contants missing 
+    for (int i = 0; i < 21; ++i)
     {
         DrawSphere(Vector3Scale(sim->bodies[i].position, (float)1E-11), 0.005F * logf(sim->bodies[i].radius), sim->bodies[i].color);
     }

@@ -16,7 +16,7 @@
 
 #define GRAVITATIONAL_CONSTANT 6.6743E-11F
 #define ASTEROIDS_MEAN_RADIUS 4E11F
-#define ASTEROIDS_BODYNUM 0
+#define ASTEROIDS_BODYNUM 10
 
 /**
  * @brief Gets a uniform random value in a range
@@ -54,11 +54,11 @@ void configureAsteroid(OrbitalBody *body, float centerMass)
     float vy = getRandomFloat(-1E2F, 1E2F);
 
     // Fill in with your own fields:
-    // body->mass = 1E12F;  // Typical asteroid weight: 1 billion tons
-    // body->radius = 2E3F; // Typical asteroid radius: 2km
-    // body->color = GRAY;
-    // body->position = {r * cosf(phi), 0, r * sinf(phi)};
-    // body->velocity = {-v * sinf(phi), vy, v * cosf(phi)};
+    body->mass = 1E12F;  // Typical asteroid weight: 1 billion tons
+    body->radius = 2E3F; // Typical asteroid radius: 2km
+    body->color = GRAY;
+    body->position = {r * cosf(phi), 0, r * sinf(phi)};
+    body->velocity = {-v * sinf(phi), vy, v * cosf(phi)};
 }
 
 /**
@@ -74,24 +74,38 @@ OrbitalSim *constructOrbitalSim(float timeStep)
     /*Adds the Solar System and Alpha Centaury System data to the array as well as the proper timestep, elapsedtime and number of bodies initial values */
     OrbitalSim *newSim = new OrbitalSim;
 
-    newSim->timeStep = timeStep;            
+    newSim->timeStep = timeStep*0.1f;            //Simulacion mas lenta solo para ver mejor 
     newSim->elapsedTime = 0;
     newSim->numBodies = SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM + ASTEROIDS_BODYNUM;
 
 
-    for (unsigned int i = 0; i < 9; ++i)                 // The first elements of the array will be the bodies of the Solar System and Alpha Centaury System.
-    {                                                               // After them, the asteroid's data will be stored, the "else" case.
-        if (i < newSim->numBodies)
-        {
-            newSim->bodies[i] = { solarSystem[i].mass, solarSystem[i].radius,
-            solarSystem[i].color, solarSystem[i].position, solarSystem[i].velocity, 0 };
-        }
-        else
-        {
+    //inicialized planets
+    for (unsigned int i = 0; i < SOLARSYSTEM_BODYNUM; i++) {
+        newSim->bodies[i] = {
+            solarSystem[i].mass,
+            solarSystem[i].radius,
+            solarSystem[i].color,
+            solarSystem[i].position,
+            solarSystem[i].velocity,
+            {0,0,0}
+        };
+    }
 
-        }
+    //inicializes constelations after planets
+    for (unsigned int i = 0; i < ALPHACENTAURISYSTEM_BODYNUM; i++) {
+        newSim->bodies[SOLARSYSTEM_BODYNUM + i] = {
+            alphaCentauriSystem[i].mass,
+            alphaCentauriSystem[i].radius,
+            alphaCentauriSystem[i].color,
+            alphaCentauriSystem[i].position,
+            alphaCentauriSystem[i].velocity,
+            {0,0,0}
+        };
+    }
 
-
+    //iniciliazes asteroids after planets and contelations
+    for (unsigned int i = 0; i < ASTEROIDS_BODYNUM; i++) {
+        configureAsteroid(&newSim->bodies[SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM + i], solarSystem[0].mass);
     }
     return newSim; // This should return your orbital sim
 }
@@ -120,7 +134,7 @@ void updateOrbitalSim(OrbitalSim *sim)
     float auxScalar;
     Vector3 auxVector;
 
-    for (unsigned int i = 0; i < 12; ++i)
+    for (unsigned int i = 0; i < sim->numBodies; ++i)
     {
         sim->bodies[i].aceleration = { 0,0,0 };
     }
