@@ -138,20 +138,21 @@ void updateOrbitalSim(OrbitalSim *sim)
     {
         sim->bodies[i].aceleration = { 0,0,0 };
     }
-    /*for (int i = 0; i < SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM - 2 + ASTEROIDS_BODYNUM; ++i)
+    for (int i = 1; i < 10; ++i)
     {
-        for (int j = i + 1; j < SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM; j++)
+        for (int j = 0; j < 10; j++)
         {
-            auxVector = Vector3Subtract(sim->bodies[j].position, sim->bodies[i].position);
+            auxVector = Vector3Subtract(sim->bodies[i].position, sim->bodies[j].position);
             gravityForce = Vector3Normalize(auxVector);                                          // The gravitational force is calculated by steps.
             auxScalar = Vector3Length(auxVector);
-            gravityForce = Vector3Scale( gravityForce, (float) -6.6743E-11 * sim->bodies[i].mass * sim->bodies[j].mass / (auxScalar * auxScalar));
-            
-            sim->bodies[i].aceleration += Vector3Scale(gravityForce, 1 / sim->bodies[i].mass);
-            sim->bodies[j].aceleration += Vector3Scale(gravityForce, 1 / sim->bodies[j].mass);
+            auxScalar = -6.6743E-11 * sim->bodies[i].mass * sim->bodies[j].mass / (auxScalar * auxScalar);
+            gravityForce = Vector3Scale(gravityForce, auxScalar);
+
+            if(j != i)
+                sim->bodies[i].aceleration = Vector3Add(Vector3Scale(gravityForce, 1 / sim->bodies[i].mass), sim->bodies[i].aceleration);
         }
-        sim->bodies[i].velocity += Vector3Scale(sim->bodies[i].aceleration, sim->timeStep);
-    }*/
+        sim->bodies[i].velocity = Vector3Add(Vector3Scale(sim->bodies[i].aceleration, sim->timeStep), sim->bodies[i].velocity);
+    }
     for (unsigned int i = 0; i < sim->numBodies; ++i)
     {
         sim->bodies[i].position += Vector3Scale(sim->bodies[i].velocity, sim->timeStep);
