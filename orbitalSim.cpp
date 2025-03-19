@@ -16,7 +16,7 @@
 
 #define GRAVITATIONAL_CONSTANT 6.6743E-11F
 #define ASTEROIDS_MEAN_RADIUS 4E11F
-#define ASTEROIDS_BODYNUM 10
+#define ASTEROIDS_BODYNUM 0
 
 /**
  * @brief Gets a uniform random value in a range
@@ -74,7 +74,7 @@ OrbitalSim *constructOrbitalSim(float timeStep)
     /*Adds the Solar System and Alpha Centaury System data to the array as well as the proper timestep, elapsedtime and number of bodies initial values */
     OrbitalSim *newSim = new OrbitalSim;
 
-    newSim->timeStep = timeStep*0.1f;            //Simulacion mas lenta solo para ver mejor 
+    newSim->timeStep = timeStep;            //Simulacion mas lenta solo para ver mejor 
     newSim->elapsedTime = 0;
     newSim->numBodies = SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM + ASTEROIDS_BODYNUM;
 
@@ -92,7 +92,7 @@ OrbitalSim *constructOrbitalSim(float timeStep)
     }
 
     //inicializes constelations after planets
-    for (unsigned int i = 0; i < ALPHACENTAURISYSTEM_BODYNUM; i++) {
+    /*for (unsigned int i = 0; i < ALPHACENTAURISYSTEM_BODYNUM; i++) {
         newSim->bodies[SOLARSYSTEM_BODYNUM + i] = {
             alphaCentauriSystem[i].mass,
             alphaCentauriSystem[i].radius,
@@ -102,7 +102,7 @@ OrbitalSim *constructOrbitalSim(float timeStep)
             {0,0,0}
         };
     }
-
+    */
     //iniciliazes asteroids after planets and contelations
     for (unsigned int i = 0; i < ASTEROIDS_BODYNUM; i++) {
         configureAsteroid(&newSim->bodies[SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM + i], solarSystem[0].mass);
@@ -138,9 +138,9 @@ void updateOrbitalSim(OrbitalSim *sim)
     {
         sim->bodies[i].aceleration = { 0,0,0 };
     }
-    for (int i = 1; i < 10; ++i)
+    for (int i = 1; i < SOLARSYSTEM_BODYNUM; ++i)
     {
-        for (int j = 0; j < 10; j++)
+        for (int j = 0; j < SOLARSYSTEM_BODYNUM; j++)
         {
             auxVector = Vector3Subtract(sim->bodies[i].position, sim->bodies[j].position);
             gravityForce = Vector3Normalize(auxVector);                                          // The gravitational force is calculated by steps.
@@ -153,7 +153,7 @@ void updateOrbitalSim(OrbitalSim *sim)
         }
         sim->bodies[i].velocity = Vector3Add(Vector3Scale(sim->bodies[i].aceleration, sim->timeStep), sim->bodies[i].velocity);
     }
-    for (unsigned int i = 0; i < sim->numBodies; ++i)
+    for (unsigned int i = 0; i < SOLARSYSTEM_BODYNUM; ++i)
     {
         sim->bodies[i].position += Vector3Scale(sim->bodies[i].velocity, sim->timeStep);
     }

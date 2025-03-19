@@ -98,7 +98,7 @@ void renderView(View *view, OrbitalSim *sim)
 
     // Fill in your 3D drawing code here:
     //contants missing 
-    for (int i = 0; i < 21; ++i)
+    for (int i = 0; i < SOLARSYSTEM_BODYNUM; ++i)
     {
         DrawSphere(Vector3Scale(sim->bodies[i].position, (float)1E-11), 0.005F * logf(sim->bodies[i].radius), sim->bodies[i].color);
     }
