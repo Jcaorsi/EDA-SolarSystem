@@ -145,9 +145,9 @@ void updateOrbitalSim(OrbitalSim *sim)
             if (i < SOLARSYSTEM_BODYNUM) {
                 gravityForce = calcGravitationalForce(&sim, i, j);
             }
-            else if (i >= SOLARSYSTEM_BODYNUM && i < ALPHACENTAURISYSTEM_BODYNUM) {
+            else if (i >= SOLARSYSTEM_BODYNUM && i < ALPHACENTAURISYSTEM_BODYNUM + SOLARSYSTEM_BODYNUM) {
                 gravityForce = calcGravitationalForce(&sim, i, 0);
-                printf("hola\n\n");
+                printf("\n\nhola\n\n");
             }
             if(j != i)
                 sim->bodies[i].aceleration = Vector3Add(Vector3Scale(gravityForce, 1 / sim->bodies[i].mass), sim->bodies[i].aceleration);
