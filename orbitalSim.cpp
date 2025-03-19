@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <stdio.h>
 
 #include "OrbitalSim.h"
 #include "ephemerides.h"
@@ -18,6 +19,7 @@
 #define ASTEROIDS_MEAN_RADIUS 4E11F
 #define ASTEROIDS_BODYNUM 0
 
+Vector3 calcGravitationalForce(OrbitalSim** ppsim, unsigned int i, unsigned int j);   //CONSULTAR SI SE COMENTA EL PROTOTIPO
 /**
  * @brief Gets a uniform random value in a range
  *
@@ -92,7 +94,7 @@ OrbitalSim *constructOrbitalSim(float timeStep)
     }
 
     //inicializes constelations after planets
-    /*for (unsigned int i = 0; i < ALPHACENTAURISYSTEM_BODYNUM; i++) {
+    for (unsigned int i = 0; i < ALPHACENTAURISYSTEM_BODYNUM; i++) {
         newSim->bodies[SOLARSYSTEM_BODYNUM + i] = {
             alphaCentauriSystem[i].mass,
             alphaCentauriSystem[i].radius,
@@ -102,7 +104,7 @@ OrbitalSim *constructOrbitalSim(float timeStep)
             {0,0,0}
         };
     }
-    */
+    
     //iniciliazes asteroids after planets and contelations
     for (unsigned int i = 0; i < ASTEROIDS_BODYNUM; i++) {
         configureAsteroid(&newSim->bodies[SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM + i], solarSystem[0].mass);
@@ -130,32 +132,55 @@ void updateOrbitalSim(OrbitalSim *sim)
     // Your code goes here...
     /*Considering the reduced mass that asteroids have, we will focus solely on the calculation of gravitational force between every body,
     except for the one between asteroids. By doing this, we will greatly reduce the computing power required for the movement in our simulation*/
-    Vector3 gravityForce;
-    float auxScalar;
-    Vector3 auxVector;
+    Vector3 gravityForce = { 0,0,0 };
 
     for (unsigned int i = 0; i < sim->numBodies; ++i)
     {
         sim->bodies[i].aceleration = { 0,0,0 };
     }
-    for (int i = 1; i < SOLARSYSTEM_BODYNUM; ++i)
+    for (int i = 1; i < SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM; ++i)
     {
         for (int j = 0; j < SOLARSYSTEM_BODYNUM; j++)
         {
-            auxVector = Vector3Subtract(sim->bodies[i].position, sim->bodies[j].position);
-            gravityForce = Vector3Normalize(auxVector);                                          // The gravitational force is calculated by steps.
-            auxScalar = Vector3Length(auxVector);
-            auxScalar = -6.6743E-11 * sim->bodies[i].mass * sim->bodies[j].mass / (auxScalar * auxScalar);
-            gravityForce = Vector3Scale(gravityForce, auxScalar);
-
+            if (i < SOLARSYSTEM_BODYNUM) {
+                gravityForce = calcGravitationalForce(&sim, i, j);
+            }
+            else if (i >= SOLARSYSTEM_BODYNUM && i < ALPHACENTAURISYSTEM_BODYNUM) {
+                gravityForce = calcGravitationalForce(&sim, i, 0);
+                printf("hola\n\n");
+            }
             if(j != i)
                 sim->bodies[i].aceleration = Vector3Add(Vector3Scale(gravityForce, 1 / sim->bodies[i].mass), sim->bodies[i].aceleration);
+
         }
         sim->bodies[i].velocity = Vector3Add(Vector3Scale(sim->bodies[i].aceleration, sim->timeStep), sim->bodies[i].velocity);
     }
-    for (unsigned int i = 0; i < SOLARSYSTEM_BODYNUM; ++i)
+    for (unsigned int i = 0; i < SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM; ++i)
     {
         sim->bodies[i].position += Vector3Scale(sim->bodies[i].velocity, sim->timeStep);
     }
 
+}
+
+//Function that calculates the gravitational force between the body i and the body j
+
+
+/**
+ * @brief Gets a uniform random value in a range
+ *
+ * @param ppSim orbital simulation 
+ * @param i first celestial body 
+ * @param j second celestial body
+ *
+ * @return gravitational force between two bodies
+ */
+Vector3 calcGravitationalForce(OrbitalSim** ppSim, unsigned int i, unsigned int j) {
+
+    float auxScalar;
+    Vector3 auxVector;
+    auxVector = Vector3Subtract((*ppSim)->bodies[i].position, (*ppSim)->bodies[j].position);                                         // The gravitational force is calculated by steps.
+    auxScalar = Vector3Length(auxVector);
+    auxScalar = -6.6743E-11 * (*ppSim)->bodies[i].mass * (*ppSim)->bodies[j].mass / (auxScalar * auxScalar);
+
+    return Vector3Scale(Vector3Normalize(auxVector), auxScalar);
 }
