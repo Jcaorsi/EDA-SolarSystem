@@ -8,7 +8,7 @@
 #include <time.h>
 #include <math.h>
 #include "View.h"
-//#include "ephemerides.h"
+
 #include <raymath.h>
 
 #define WINDOW_WIDTH 1280
@@ -100,8 +100,14 @@ void renderView(View *view, OrbitalSim *sim)
     //contants missing 
     for (int i = 0; i < sim->numBodies; ++i)
     {
-       
-        DrawSphere(Vector3Scale(sim->bodies[i].position, (float)1E-11), 0.005F * logf(sim->bodies[i].radius), sim->bodies[i].color);
+        if (i < 9)
+        {
+            DrawSphere(Vector3Scale(sim->bodies[i].position, (float)1E-11), 0.005F * logf(sim->bodies[i].radius), sim->bodies[i].color);
+        }
+        else
+        {
+            DrawPoint3D(Vector3Scale(sim->bodies[i].position, (float)1E-11), sim->bodies[i].color);
+        }
     }
     DrawGrid(10, 10.0f);
     EndMode3D();

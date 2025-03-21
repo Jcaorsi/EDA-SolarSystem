@@ -19,7 +19,7 @@
 #define ASTEROIDS_BODYNUM 89
 #define ALPHASYSTEM
 
-Vector3 calcGravitationalForce(OrbitalSim** ppsim, unsigned int i, unsigned int j);   //CONSULTAR SI SE COMENTA EL PROTOTIPO
+Vector3 calcGravitationalForce(OrbitalSim** ppsim, unsigned int i, unsigned int j);
 /**
  * @brief Gets a uniform random value in a range
  *
