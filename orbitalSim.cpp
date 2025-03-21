@@ -16,7 +16,7 @@
 
 #define GRAVITATIONAL_CONSTANT 6.6743E-11F
 #define ASTEROIDS_MEAN_RADIUS 4E11F
-#define ASTEROIDS_BODYNUM 0
+#define ASTEROIDS_BODYNUM 89
 #define ALPHASYSTEM
 
 Vector3 calcGravitationalForce(OrbitalSim** ppsim, unsigned int i, unsigned int j);   //CONSULTAR SI SE COMENTA EL PROTOTIPO
@@ -78,7 +78,7 @@ OrbitalSim *constructOrbitalSim(float timeStep)
 
     newSim->timeStep = timeStep;            //Simulacion mas lenta solo para ver mejor 
     newSim->elapsedTime = 0;
-    newSim->numBodies = SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM + ASTEROIDS_BODYNUM;
+    newSim->numBodies = SOLARSYSTEM_BODYNUM + ASTEROIDS_BODYNUM; //ALPHACENTAURISYSTEM_BODYNUM +
 
 
     //inicialized planets
@@ -92,8 +92,12 @@ OrbitalSim *constructOrbitalSim(float timeStep)
             {0,0,0}
         };
     }
-
-    //inicializes constelations after planets
+    //iniciliazes asteroids after planets 
+        for (unsigned int i = 0; i < ASTEROIDS_BODYNUM; i++) {
+            configureAsteroid(&newSim->bodies[SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM + i], solarSystem[0].mass);
+        }
+    /*
+    //inicializes constelations after planets and asteroids
     for (unsigned int i = 0; i < ALPHACENTAURISYSTEM_BODYNUM; i++) {
         newSim->bodies[SOLARSYSTEM_BODYNUM + i] = {
             alphaCentauriSystem[i].mass,
@@ -103,12 +107,9 @@ OrbitalSim *constructOrbitalSim(float timeStep)
             alphaCentauriSystem[i].velocity,
             {0,0,0}
         };
-    }
+    }*/
     
-    //iniciliazes asteroids after planets and contelations
-    for (unsigned int i = 0; i < ASTEROIDS_BODYNUM; i++) {
-        configureAsteroid(&newSim->bodies[SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM + i], solarSystem[0].mass);
-    }
+    
     return newSim; // This should return your orbital sim
 }
 
@@ -138,7 +139,7 @@ void updateOrbitalSim(OrbitalSim *sim)
     {
         sim->bodies[i].aceleration = { 0,0,0 };
     }
-    for (int i = 1; i < SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM; ++i)
+    for (int i = 1; i < sim->numBodies; ++i)
     {
         for (int j = 0; j < SOLARSYSTEM_BODYNUM; j++)
         {
@@ -146,17 +147,24 @@ void updateOrbitalSim(OrbitalSim *sim)
             {
                 gravityForce = calcGravitationalForce(&sim, i, j);
             }
+            
+            /*
             else if (i == ALPHACENTAURISYSTEM_BODYNUM + SOLARSYSTEM_BODYNUM - 1)
             {
 #ifdef ALPHASYSTEM
                 gravityForce = calcGravitationalForce(&sim, i, ALPHACENTAURISYSTEM_BODYNUM + SOLARSYSTEM_BODYNUM - 2);
 #endif
             }
-            else if (i == ALPHACENTAURISYSTEM_BODYNUM + SOLARSYSTEM_BODYNUM - 2) 
+            else if (i == ALPHACENTAURISYSTEM_BODYNUM + SOLARSYSTEM_BODYNUM - 2)
             {
 #ifdef ALPHASYSTEM
-              gravityForce = calcGravitationalForce(&sim, i, ALPHACENTAURISYSTEM_BODYNUM + SOLARSYSTEM_BODYNUM - 1);
+                gravityForce = calcGravitationalForce(&sim, i, ALPHACENTAURISYSTEM_BODYNUM + SOLARSYSTEM_BODYNUM - 1);
 #endif
+            }
+            */
+            else
+            {
+                gravityForce = calcGravitationalForce(&sim, i, j);
             }
 
             if(j != i)
@@ -165,11 +173,11 @@ void updateOrbitalSim(OrbitalSim *sim)
         }
         sim->bodies[i].velocity = Vector3Add(Vector3Scale(sim->bodies[i].aceleration, sim->timeStep), sim->bodies[i].velocity);
     }
-    for (unsigned int i = 0; i < SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM; ++i)
+    for (unsigned int i = 0; i < sim->numBodies; ++i)
     {
         sim->bodies[i].position += Vector3Scale(sim->bodies[i].velocity, sim->timeStep);
     }
-
+    sim->elapsedTime += sim->timeStep; 
 }
 
 //Function that calculates the gravitational force between the body i and the body j
