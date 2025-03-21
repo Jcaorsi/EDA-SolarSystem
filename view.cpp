@@ -100,7 +100,9 @@ void renderView(View *view, OrbitalSim *sim)
     //contants missing 
     for (int i = 0; i < 11; ++i)
     {
-        DrawSphere(Vector3Scale(sim->bodies[i].position, (float)1E-11), 0.005F * logf(sim->bodies[i].radius), sim->bodies[i].color);
+       
+       DrawSphere(Vector3Scale(sim->bodies[i].position, (float)1E-11), 0.005F * logf(sim->bodies[i].radius), sim->bodies[i].color);
+  
     }
     DrawGrid(10, 10.0f);
     EndMode3D();

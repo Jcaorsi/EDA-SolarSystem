@@ -10,7 +10,6 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include <stdio.h>
 
 #include "OrbitalSim.h"
 #include "ephemerides.h"
@@ -18,6 +17,7 @@
 #define GRAVITATIONAL_CONSTANT 6.6743E-11F
 #define ASTEROIDS_MEAN_RADIUS 4E11F
 #define ASTEROIDS_BODYNUM 0
+#define ALPHASYSTEM
 
 Vector3 calcGravitationalForce(OrbitalSim** ppsim, unsigned int i, unsigned int j);   //CONSULTAR SI SE COMENTA EL PROTOTIPO
 /**
@@ -142,13 +142,23 @@ void updateOrbitalSim(OrbitalSim *sim)
     {
         for (int j = 0; j < SOLARSYSTEM_BODYNUM; j++)
         {
-            if (i < SOLARSYSTEM_BODYNUM) {
+            if (i < SOLARSYSTEM_BODYNUM) 
+            {
                 gravityForce = calcGravitationalForce(&sim, i, j);
             }
-            else if (i >= SOLARSYSTEM_BODYNUM && i < ALPHACENTAURISYSTEM_BODYNUM + SOLARSYSTEM_BODYNUM) {
-                gravityForce = calcGravitationalForce(&sim, i, 0);
-                printf("\n\nhola\n\n");
+            else if (i == ALPHACENTAURISYSTEM_BODYNUM + SOLARSYSTEM_BODYNUM - 1)
+            {
+#ifdef ALPHASYSTEM
+                gravityForce = calcGravitationalForce(&sim, i, ALPHACENTAURISYSTEM_BODYNUM + SOLARSYSTEM_BODYNUM - 2);
+#endif
             }
+            else if (i == ALPHACENTAURISYSTEM_BODYNUM + SOLARSYSTEM_BODYNUM - 2) 
+            {
+#ifdef ALPHASYSTEM
+              gravityForce = calcGravitationalForce(&sim, i, ALPHACENTAURISYSTEM_BODYNUM + SOLARSYSTEM_BODYNUM - 1);
+#endif
+            }
+
             if(j != i)
                 sim->bodies[i].aceleration = Vector3Add(Vector3Scale(gravityForce, 1 / sim->bodies[i].mass), sim->bodies[i].aceleration);
 
