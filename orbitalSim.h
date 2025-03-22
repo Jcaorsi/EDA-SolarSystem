@@ -7,7 +7,7 @@
 
 #ifndef ORBITALSIM_H
 #define ORBITALSIM_H
-#define MAX_BODIES 100
+#define MAX_BODIES 10000
 #include <raylib.h>
 /**
  * @brief Orbital body with its essential properties is defined
@@ -34,6 +34,7 @@ struct OrbitalSim
     float elapsedTime;
     unsigned int numBodies;
     OrbitalBody bodies[MAX_BODIES];    
+    unsigned int solarSystemBodies;
 
 };
 
