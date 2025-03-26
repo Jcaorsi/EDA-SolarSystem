@@ -18,9 +18,10 @@
 #define ASTEROIDS_MEAN_RADIUS 4E11F
 #define ASTEROIDS_BODYNUM 1000
 
-//#define ALPHASYSTEM
+#define ALPHASYSTEM
 
 Vector3 calcGravitationalForce(OrbitalSim** ppsim, unsigned int i, unsigned int j);
+
 /**
  * @brief Gets a uniform random value in a range
  *
@@ -82,18 +83,6 @@ OrbitalSim *constructOrbitalSim(float timeStep)
     newSim->numBodies = SOLARSYSTEM_BODYNUM + ASTEROIDS_BODYNUM; 
     newSim->solarSystemBodies = SOLARSYSTEM_BODYNUM;
 
-    //inicialized planets
-    for (unsigned int i = 0; i < SOLARSYSTEM_BODYNUM; i++)
-    {
-        newSim->bodies[i] = {
-            solarSystem[i].mass,
-            solarSystem[i].radius,
-            solarSystem[i].color,
-            solarSystem[i].position,
-            solarSystem[i].velocity,
-            {0,0,0}
-        };
-    }
 #ifdef ALPHASYSTEM
     newSim->numBodies = ALPHACENTAURISYSTEM_BODYNUM;
     //inicializes constelations (if defined)
@@ -109,15 +98,26 @@ OrbitalSim *constructOrbitalSim(float timeStep)
     }
 #endif
 
+    //inicialized planets (after constelations if defined)
+    for (unsigned int i = 0; i < SOLARSYSTEM_BODYNUM; i++)
+    {
+        newSim->bodies[i] = {
+            solarSystem[i].mass,
+            solarSystem[i].radius,
+            solarSystem[i].color,
+            solarSystem[i].position,
+            solarSystem[i].velocity,
+            {0,0,0}
+        };
+    }
+
+
     //iniciliazes asteroids after planets (and constelations if defined) 
         for (unsigned int i = 0; i < ASTEROIDS_BODYNUM; i++)
         {
             configureAsteroid(&newSim->bodies[SOLARSYSTEM_BODYNUM + ALPHACENTAURISYSTEM_BODYNUM + i], solarSystem[0].mass);
         }
 
-
-
-    
     return newSim; // This should return your orbital sim
 }
 
@@ -126,7 +126,6 @@ OrbitalSim *constructOrbitalSim(float timeStep)
  */
 void destroyOrbitalSim(OrbitalSim *sim)
 {
-    // Your code goes here...
     delete sim;
 
 }
@@ -138,7 +137,6 @@ void destroyOrbitalSim(OrbitalSim *sim)
  */
 void updateOrbitalSim(OrbitalSim *sim)
 {
-    // Your code goes here...
     /*Considering the reduced mass that asteroids have, we will focus solely on the calculation of gravitational force between every body,
     except for the one between asteroids. By doing this, we will greatly reduce the computing power required for the movement in our simulation*/
     Vector3 gravityForce = { 0,0,0 };
