@@ -95,7 +95,6 @@ void renderView(View *view, OrbitalSim *sim)
     ClearBackground(BLACK);
     BeginMode3D(view->camera);
 
-    // Fill in your 3D drawing code here:
     for (int i = 0; i < sim->numBodies; ++i)
     {
         if (i < sim->solarSystemBodies)
@@ -109,10 +108,6 @@ void renderView(View *view, OrbitalSim *sim)
     }
     DrawGrid(10, 10.0f);
     EndMode3D();
-
-
-
-// Fill in your 2D drawing code here:
 
     DrawText(getISODate(sim->elapsedTime), 5, 5, 50, WHITE);
     DrawFPS(5, 695);

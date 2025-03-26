@@ -22,7 +22,8 @@ significativamente más simple que el dibujo de cada una de las numerosas esfera
 
 ## Mejora de la complejidad computacional
 
-[completar]
+Representar los asteroides como puntos 
+Cálculo de la fuerza gravitatoria dentro de una función 
 
 ## Bonus points
 
