@@ -5,8 +5,6 @@
 * Juan Ignacio Caorsi: implementación de calculo de aceleración y creación de estructuras OrbitalBody, OrbitalSim.
 * Ana Destefano: iniciación y dibujo de cuerpos celestes
 
-[completar]
-
 ## Verificación del timestep
 
 Verificamos que la simulación funcione bien unos 100 años adelante y así fue, no se perdió el movimiento con el que debe funcionar tanto el sistema solar como los asteroides.
@@ -25,13 +23,15 @@ Por esto, consideramos que  bueno que se devolviera el vector nulo.
 
 ## Complejidad computacional con asteroides
 
-Primero, al colocar 90 asteroides graficados con esferas, la simulación dejaba de funcionar. Por esto, decidimos intentar representar a los asteroides como puntos y no esferas, pensando en que es algo 
-significativamente más simple que el dibujo de cada una de las numerosas esferas. Una vez hecho esto, se logró aumentar drásticamente el número máximo de esferas que soporta nuestra simulación.
+Primero, al colocar 90 asteroides graficados con esferas, la simulación dejaba de funcionar.
 
 ## Mejora de la complejidad computacional
 
-Representar los asteroides como puntos 
-Cálculo de la fuerza gravitatoria dentro de una función 
+Decidimos intentar representar a los asteroides como puntos y no esferas, pensando en que es algo 
+significativamente más simple que el dibujo de cada una de las numerosas esferas. Una vez hecho esto,
+se logró aumentar drásticamente el número máximo de esferas que soporta nuestra simulación.
+
+Cálculo de la fuerza gravitatoria dentro de una función.
 
 ## Bonus points
 
