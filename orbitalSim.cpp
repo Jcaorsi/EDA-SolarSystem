@@ -51,7 +51,7 @@ void configureAsteroid(OrbitalBody *body, float centerMass)
     float phi = getRandomFloat(0, 2.0F * (float)M_PI);
 
     // https://en.wikipedia.org/wiki/Circular_orbit#Velocity
-    float v = sqrtf(GRAVITATIONAL_CONSTANT * centerMass / r) * getRandomFloat(0.6F, 1.2F);
+    float v = sqrtf((float)GRAVITATIONAL_CONSTANT * centerMass / r) * getRandomFloat(0.6F, 1.2F);
     float vy = getRandomFloat(-1E2F, 1E2F);
 
     body->mass = 1E12F;  // Typical asteroid weight: 1 billion tons
@@ -195,11 +195,16 @@ void updateOrbitalSim(OrbitalSim *sim)
  */
 Vector3 calcGravitationalForce(OrbitalSim** ppSim, unsigned int i, unsigned int j)
 {
-    float auxScalar;
-    Vector3 auxVector;
-    auxVector = Vector3Subtract((*ppSim)->bodies[i].position, (*ppSim)->bodies[j].position);                                         // The gravitational force is calculated by steps.
-    auxScalar = Vector3Length(auxVector);
-    auxScalar = -GRAVITATIONAL_CONSTANT * (*ppSim)->bodies[i].mass * (*ppSim)->bodies[j].mass / (auxScalar * auxScalar);
-    
-    return Vector3Scale(Vector3Normalize(auxVector), auxScalar);
+    if (j != i)
+    {
+        double auxScalar;
+        Vector3 auxVector;
+        auxVector = Vector3Subtract((*ppSim)->bodies[i].position, (*ppSim)->bodies[j].position);                                         // The gravitational force is calculated by steps.
+        auxScalar = Vector3Length(auxVector);
+        auxScalar = -GRAVITATIONAL_CONSTANT * (*ppSim)->bodies[i].mass * (*ppSim)->bodies[j].mass / (auxScalar * auxScalar);
+
+        return Vector3Scale(Vector3Normalize(auxVector), (float)auxScalar);
+    }
+    else
+        return { 0,0,0 };
 }
