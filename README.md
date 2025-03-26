@@ -15,7 +15,7 @@ El tipo de dato de las variables con las que se trabaja que son float, se vio qu
 posible para lograr la simulación deseada, y con variables tipo double no se logran mejoras significativas en todos los casos, exceptuando uno. 
 Una variable llamada auxScalar en la función de updateOrbitalSim debe ser del tipo double pues 
 en esta se almacenan operaciones que tienen a la constante gravitacional (un valor de presición double). Para las cuentas que incluyan a esta constante,
-se realiza un casteo temporal pues funciones como Vector3Scale tienen como argumento a un valor con presición float para confirmar que incluso si
+se realiza un casteo temporal pues funciones como Vector3Scale tienen como argumento a un valor con presición float, por lo que para confirmar que incluso si
 ocurriera un casteo implícito, lo que hacemos es deliberado y no daña a la simulación.
 
 Por otro lado, confirmamos que no ocurran operaciones invalidas, en particular, la división por 0. En el caso del cálculo de la fuerza de atracción entre un planeta y si mismo, esto podría llegar a pasar. 
