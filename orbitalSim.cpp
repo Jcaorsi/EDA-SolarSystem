@@ -20,7 +20,7 @@
 
 //#define ALPHASYSTEM
 
-Vector3 calcGravitationalForce(OrbitalSim** ppsim, unsigned int i, unsigned int j);
+Vector3 calcGravitationalForce(OrbitalSim* sim, unsigned int i, unsigned int j);
 
 /**
  * @brief Gets a uniform random value in a range
@@ -154,12 +154,12 @@ void updateOrbitalSim(OrbitalSim* sim)
                 {
                     if (i < SOLARSYSTEM_BODYNUM)
                     {
-                        gravityForce = calcGravitationalForce(&sim, i, j);
+                        gravityForce = calcGravitationalForce(sim, i, j);
                     }
 
                     else
                     {
-                        gravityForce = calcGravitationalForce(&sim, i, j);
+                        gravityForce = calcGravitationalForce(sim, i, j);
                     }
 
                     sim->bodies[i].aceleration = Vector3Add(Vector3Scale(gravityForce, 1 / sim->bodies[i].mass), sim->bodies[i].aceleration);
@@ -186,11 +186,11 @@ void updateOrbitalSim(OrbitalSim* sim)
             }
 
         }*/
-        gravityForce = calcGravitationalForce(&sim, 1, 0);
+        gravityForce = calcGravitationalForce(sim, 1, 0);
         sim->bodies[1].aceleration = Vector3Add(Vector3Scale(gravityForce, 1 / sim->bodies[1].mass), sim->bodies[1].aceleration);
         sim->bodies[1].velocity = Vector3Add(Vector3Scale(sim->bodies[1].aceleration, sim->timeStep), sim->bodies[1].velocity);
 
-        gravityForce = calcGravitationalForce(&sim, 0, 1);
+        gravityForce = calcGravitationalForce(sim, 0, 1);
         sim->bodies[0].aceleration = Vector3Add(Vector3Scale(gravityForce, 1 / sim->bodies[0].mass), sim->bodies[0].aceleration);
         sim->bodies[0].velocity = Vector3Add(Vector3Scale(sim->bodies[0].aceleration, sim->timeStep), sim->bodies[0].velocity);
     #endif
@@ -206,21 +206,21 @@ void updateOrbitalSim(OrbitalSim* sim)
 /**
  * @brief Calculates the gravitational force between the body i and the body j
  *
- * @param ppSim orbital simulation 
+ * @param sim orbital simulation 
  * @param i first celestial body 
  * @param j second celestial body
  *
  * @return gravitational force between two bodies
  */
-Vector3 calcGravitationalForce(OrbitalSim** ppSim, unsigned int i, unsigned int j)
+Vector3 calcGravitationalForce(OrbitalSim* sim, unsigned int i, unsigned int j)
 {
     if (j != i)
     {
         double auxScalar;
         Vector3 auxVector;
-        auxVector = Vector3Subtract((*ppSim)->bodies[i].position, (*ppSim)->bodies[j].position);    // The gravitational force is calculated by steps.
+        auxVector = Vector3Subtract(sim->bodies[i].position, sim->bodies[j].position);    // The gravitational force is calculated by steps.
         auxScalar = Vector3Length(auxVector);
-        auxScalar = -GRAVITATIONAL_CONSTANT * (*ppSim)->bodies[i].mass * (*ppSim)->bodies[j].mass / (auxScalar * auxScalar);
+        auxScalar = -GRAVITATIONAL_CONSTANT * sim->bodies[i].mass * sim->bodies[j].mass / (auxScalar * auxScalar);
 
         return Vector3Scale(Vector3Normalize(auxVector), (float)auxScalar);
     }
