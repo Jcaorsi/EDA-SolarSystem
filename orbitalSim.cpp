@@ -18,7 +18,7 @@
 #define ASTEROIDS_MEAN_RADIUS 4E11F
 #define ASTEROIDS_BODYNUM 1000
 
-#define ALPHASYSTEM
+//#define ALPHASYSTEM
 
 Vector3 calcGravitationalForce(OrbitalSim** ppsim, unsigned int i, unsigned int j);
 
@@ -218,7 +218,7 @@ Vector3 calcGravitationalForce(OrbitalSim** ppSim, unsigned int i, unsigned int 
     {
         double auxScalar;
         Vector3 auxVector;
-        auxVector = Vector3Subtract((*ppSim)->bodies[i].position, (*ppSim)->bodies[j].position);                                         // The gravitational force is calculated by steps.
+        auxVector = Vector3Subtract((*ppSim)->bodies[i].position, (*ppSim)->bodies[j].position);    // The gravitational force is calculated by steps.
         auxScalar = Vector3Length(auxVector);
         auxScalar = -GRAVITATIONAL_CONSTANT * (*ppSim)->bodies[i].mass * (*ppSim)->bodies[j].mass / (auxScalar * auxScalar);
 

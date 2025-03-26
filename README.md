@@ -11,19 +11,17 @@ Verificamos que la simulación funcione bien unos 100 años adelante y así fue,
 
 ## Verificación del tipo de datos float
 
-El tipo de dato de las variables con las que se trabaja que son float, se vio que tienen suficiente precisión, pues el trabajo con solo enteros no es 
-posible para lograr la simulación deseada, y con variables tipo double no se logran mejoras significativas en todos los casos, exceptuando uno. 
-Una variable llamada auxScalar en la función de updateOrbitalSim debe ser del tipo double pues 
-en esta se almacenan operaciones que tienen a la constante gravitacional (un valor de presición double). Para las cuentas que incluyan a esta constante,
-se realiza un casteo temporal pues funciones como Vector3Scale tienen como argumento a un valor con presición float, por lo que para confirmar que incluso si
-ocurriera un casteo implícito, lo que hacemos es deliberado y no daña a la simulación.
+Las variables en la simulación son de tipo float ya que tienen suficiente presición para los cálculos que necesitamos realizar. Usar solo enteros no era viable y, aunque podríamos haber 
+usado double, no se lograban mejoras significativas en todos los casos, exceptuando uno: la variable auxScalar de la función updateOrbitalSim. Esto se debe a que en esta almacenan operaciones 
+con la constante gravitacional, que tiene presición double. Para las cuentas que incluyen esta constante, realizamos un casteo temporal, pues funciones como Vector3Scale tienen como 
+argumento a un valor con presición float, por lo que para confirmar que incluso si ocurriera un casteo implícito, lo que hacemos es deliberado y no daña a la simulación.
 
-Por otro lado, confirmamos que no ocurran operaciones invalidas, en particular, la división por 0. En el caso del cálculo de la fuerza de atracción entre un planeta y si mismo, esto podría llegar a pasar. 
-Por esto, consideramos que  bueno que se devolviera el vector nulo. 
+Por otro lado, confirmamos que no ocurran operaciones invalidas, en particular, la división por 0. Esto podría llegar a pasar en el caso del cálculo de la fuerza de atracción entre un planeta y 
+si mismo. Para evitarlo decidimos que lo mejor es devolver el vector nulo.
 
 ## Complejidad computacional con asteroides
 
-Primero, al colocar 90 asteroides graficados con esferas, la simulación dejaba de funcionar.
+Al colocar 90 asteroides graficados con esferas, la simulación dejaba de funcionar.
 
 ## Mejora de la complejidad computacional
 
@@ -31,10 +29,10 @@ Decidimos intentar representar a los asteroides como puntos y no esferas, pensan
 significativamente más simple que el dibujo de cada una de las numerosas esferas. Una vez hecho esto,
 se logró aumentar drásticamente el número máximo de esferas que soporta nuestra simulación.
 
-Cálculo de la fuerza gravitatoria dentro de una función.
+También implementammos una función para el cálculo de la fuerza gravitatoria.
 
 ## Bonus points
 
-Encontramos el easter egg, es el valor inicial de phi dentro de la función configureAsteroid, con este se logra que los asteroides comiencen su recorrido desde una recta y luego se dispersen. 
-También modificamos la masa de júpiter para que sea mil veces mayor y notamos que el sistema solar se desequilibra completamente, lo único que se mantiene "en orden" es mercurio y el sol.
+Encontramos el easter egg, es el valor inicial de phi dentro de la función configureAsteroid. Con este, se logra que los asteroides comiencen su recorrido desde una recta y luego se dispersen. 
+También modificamos la masa de Júpiter para que sea mil veces mayor y notamos que el sistema solar se desequilibra completamente, lo único que se mantiene "en orden" es Mercurio y el Sol.
 
