@@ -8,7 +8,6 @@
 #include <time.h>
 #include <math.h>
 #include "View.h"
-
 #include <raymath.h>
 
 #define WINDOW_WIDTH 1280
