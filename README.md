@@ -3,7 +3,7 @@
 ## Integrantes del grupo y contribución al trabajo de cada integrante
 
 * Juan Ignacio Caorsi: implementación de calculo de aceleración y creación de estructuras OrbitalBody, OrbitalSim.
-* Ana Destefano:
+* Ana Destefano: iniciación y dibujo de cuerpos celestes
 
 [completar]
 
