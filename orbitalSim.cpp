@@ -14,11 +14,11 @@
 #include "OrbitalSim.h"
 #include "ephemerides.h"
 
-#define GRAVITATIONAL_CONSTANT 6.6743E-11F
+#define GRAVITATIONAL_CONSTANT 6.6743E-11
 #define ASTEROIDS_MEAN_RADIUS 4E11F
 #define ASTEROIDS_BODYNUM 1000
 
-#define ALPHASYSTEM
+//#define ALPHASYSTEM
 
 Vector3 calcGravitationalForce(OrbitalSim** ppsim, unsigned int i, unsigned int j);
 
@@ -50,14 +50,10 @@ void configureAsteroid(OrbitalBody *body, float centerMass)
     float r = ASTEROIDS_MEAN_RADIUS * sqrtf(fabsf(l));
     float phi = getRandomFloat(0, 2.0F * (float)M_PI);
 
-    // Surprise!
-    // phi = 0;
-
     // https://en.wikipedia.org/wiki/Circular_orbit#Velocity
     float v = sqrtf(GRAVITATIONAL_CONSTANT * centerMass / r) * getRandomFloat(0.6F, 1.2F);
     float vy = getRandomFloat(-1E2F, 1E2F);
 
-    // Fill in with your own fields:
     body->mass = 1E12F;  // Typical asteroid weight: 1 billion tons
     body->radius = 2E3F; // Typical asteroid radius: 2km
     body->color = GRAY;
@@ -73,8 +69,6 @@ void configureAsteroid(OrbitalBody *body, float centerMass)
  */
 OrbitalSim *constructOrbitalSim(float timeStep)
 {
-    // Your code goes here...
-
     /*Adds the Solar System and Alpha Centaury System data to the array as well as the proper timestep, elapsedtime and number of bodies initial values */
     OrbitalSim *newSim = new OrbitalSim;
 
@@ -110,7 +104,6 @@ OrbitalSim *constructOrbitalSim(float timeStep)
             {0,0,0}
         };
     }
-
 
     //iniciliazes asteroids after planets (and constelations if defined) 
         for (unsigned int i = 0; i < ASTEROIDS_BODYNUM; i++)
@@ -206,7 +199,7 @@ Vector3 calcGravitationalForce(OrbitalSim** ppSim, unsigned int i, unsigned int 
     Vector3 auxVector;
     auxVector = Vector3Subtract((*ppSim)->bodies[i].position, (*ppSim)->bodies[j].position);                                         // The gravitational force is calculated by steps.
     auxScalar = Vector3Length(auxVector);
-    auxScalar = -6.6743E-11 * (*ppSim)->bodies[i].mass * (*ppSim)->bodies[j].mass / (auxScalar * auxScalar);
+    auxScalar = -GRAVITATIONAL_CONSTANT * (*ppSim)->bodies[i].mass * (*ppSim)->bodies[j].mass / (auxScalar * auxScalar);
     
     return Vector3Scale(Vector3Normalize(auxVector), auxScalar);
 }
