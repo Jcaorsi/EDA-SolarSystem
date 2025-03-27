@@ -11,6 +11,8 @@ Probamos aumentar los dias que pasan por segundo de simulación y vemos que si d
 Si aumentamos esta cantidad aún más, podremos ver que el sistema luego de cierto tiempo se destruye, los planetas salen disparados.
 En cambio, si decrementamos la cantidad de días que pasan por segundo de simulación, la simulación se mantiene estable en un periodo de tiempo mucho más grande.
 
+Finalmente decidimos mantener el timestep en 100 dias por segundo de simulación, pues es suficientemente preciso como también rápido, para que el usuario aprecie la mecánica de nuestro sistema solar.
+
 ## Verificación del tipo de datos float
 
 Las variables en la simulación son de tipo float ya que tienen suficiente presición para los cálculos que necesitamos realizar. Usar solo enteros no era viable y, aunque podríamos haber 
