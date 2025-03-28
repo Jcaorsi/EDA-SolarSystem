@@ -46,7 +46,7 @@ También implementammos una función para el cálculo de la fuerza gravitatoria.
 Encontramos el easter egg, es el valor inicial de phi dentro de la función configureAsteroid. Con este, se logra que los asteroides comiencen su recorrido desde una recta y luego se dispersen. 
 También modificamos la masa de Júpiter para que sea mil veces mayor y notamos que el sistema solar se desequilibra completamente, lo único que se mantiene "en orden" es Mercurio y el Sol.
 Logramos implementar la simulación del sistema Alpha Centauri, activable a partir de la definición de la constante ALPHASYSTEM en el archivo orbitalSim.cpp. 
-
+Además, probamos ver qué pasaría si apareciera un agujero negro y pasara por el sistema solar. Notamos que pasa algo similar al caso de jupiter cuando lo hicimos 1000 veces más masivo, el sistema se desequilibra y pierde su forma usual.
 ## Aclaraciónes generales
 
 Se decidió dejar al sol en el centro de la simulación y no calcular la atracción que los cuerpos ejercieron sobre el mismo, pues consideramos conveniente que si estamos simulando el sistema solar,
