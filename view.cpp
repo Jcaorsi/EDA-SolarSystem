@@ -95,7 +95,7 @@ void renderView(View* view, OrbitalSim* sim)
 	ClearBackground(BLACK);
 	BeginMode3D(view->camera);
 
-	for (int i = 0; i < sim->numBodies; ++i)
+	for (unsigned int i = 0; i < sim->numBodies; ++i)
 	{
 		if (i < sim->solarSystemBodies)
 		{
