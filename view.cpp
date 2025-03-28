@@ -1,7 +1,7 @@
 /**
  * @brief Implements an orbital simulation view
  * @author Marc S. Ressl, Ana Destefano, Juan I. Caorsi
- *
+ * EDA TP1 
  * @copyright Copyright (c) 2022-2023
  */
 
